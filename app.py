@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -13,16 +13,19 @@ class Todo(db.Model):
   def __repr__(self):
     return f'<Todo {self.id} {self.description}>'
 
-db.create_all()
+#db.create_all()
 
 
 @app.route('/todos/create', methods=['POST'])
 def create_todo():
-  description = request.form.get('description', '')
+  description = request.get_json()['description']  #fetches the JSON body sent, in this case fetches a dict with key 'description'
   todo = Todo(description=description)
   db.session.add(todo)
   db.session.commit()
-  return redirect(url_for('index')) #index is the name for the route handler that listens to changes on the index route
+  return jsonify({   #will return JSON data to the client
+    'description': todo.description
+  })
+  # return redirect(url_for('index')) #index is the name for the route handler that listens to changes on the index route
 
 
 @app.route('/')
