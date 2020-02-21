@@ -21,36 +21,36 @@
     <script>
       document.getElementById('form').onsubmit = function(e) {
         e.preventDefault();
-        <!-- use the event object (that is on an event handler) to prevent the default behavior that would be to submit using the method and action, as well as refresh the page -->
-        <!-- we will send the POST request asynchronously using fetch instead -->
+        // use the event object (that is on an event handler) to prevent the default behavior that would be to submit using the method and action, as well as refresh the page
+        // we will send the POST request asynchronously using fetch instead 
         fetch('/todos/create', {
-          <!--wanna send that POST request to our '/todos/create' route -->
+          //wanna send that POST request to our '/todos/create' route
           method: 'POST',
           body: JSON.stringify({
             'description': document.getElementById('description').value
-            <!--the value of whatever the user has typed in description-->
+            //the value of whatever the user has typed in description
           }),
-          <!--since we are sending JSON we want to specify the content type -->
+          // since we are sending JSON we want to specify the content type
           headers: {
             'Content-Type': 'application/json'
           }
         })
-        <!--  fetch will give a promise (because it's a promise based library) -->
-        <!--  the then method will give us a response in the callback -->
+        // fetch will give a promise (because it's a promise based library)
+        // the then method will give us a response in the callback
         .then(function(response) {
           return response.json();
-          <!-- parse out the response that will be a string as a JSON response -->
+          // parse out the response that will be a string as a JSON response
         })
         .then(function(jsonResponse) {
           console.log(jsonResponse);
-          <!--  We created our object and now we need to append it to the list  -->
-          <!--  Previously the server took care of that, now we have to add it here:  -->
-          <!-- Since our unordered list has an id of 'todos', we are going to create an li item that comes from the description and append it  -->
-          const liItem = document.createElement('LI');
+          // We created our object and now we need to append it to the list 
+          // Previously the server took care of that, now we have to add it here: 
+          // Since our unordered list has an id of 'todos', we are going to create an li item that comes from the description and append it 
+          const liItem = document.createElement('li');
           liItem.innerHTML = jsonResponse['description'];
           document.getElementById('todos').appendChild(liItem);
           document.getElementById('error').className = 'hidden';
-        });
+        })
         .catch(function() {
           document.getElementById('error').className = '';
         })
