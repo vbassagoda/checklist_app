@@ -8,28 +8,28 @@
     </style>
   </head>
   <body>
-      <div id="error" class="hidden">Whoops! Something went wrong</div>
-      <form id="form">
-          <input type="text" name="description"/>
-          <input type="submit" name="Create"/>
-      </form>
-
-    <ul>
+    <form id="form">
+        <input type="text" id="description" name="description" />
+        <input type="submit" name="Create" />
+    </form>
+    <div id="error" class="hidden">Whoops! Something went wrong</div>
+    <ul id="todos">
       {% for d in data %}
       <li>{{ d.description }}</li>
       {% endfor %}
     </ul>
     <script>
       document.getElementById('form').onsubmit = function(e) {
-        e.preventDefault();           <!-- use the event object (that is on an event handler) to prevent the default behavior that would be to submit using the method and action, as well as refresh the page -->
-        
+        e.preventDefault();
+        <!-- use the event object (that is on an event handler) to prevent the default behavior that would be to submit using the method and action, as well as refresh the page -->
         <!-- we will send the POST request asynchronously using fetch instead -->
-        fetch('/todos/create', {      <!--wanna send that POST request to our '/todos/create' route -->
+        fetch('/todos/create', {
+          <!--wanna send that POST request to our '/todos/create' route -->
           method: 'POST',
           body: JSON.stringify({
-            'description': document.getElementById('description').value   <!--the value of whatever the user has typed in description-->
+            'description': document.getElementById('description').value
+            <!--the value of whatever the user has typed in description-->
           }),
-          
           <!--since we are sending JSON we want to specify the content type -->
           headers: {
             'Content-Type': 'application/json'
@@ -38,7 +38,8 @@
         <!--  fetch will give a promise (because it's a promise based library) -->
         <!--  the then method will give us a response in the callback -->
         .then(function(response) {
-          return response.json();  <!-- parse out the response that will be a string as a JSON response -->
+          return response.json();
+          <!-- parse out the response that will be a string as a JSON response -->
         })
         .then(function(jsonResponse) {
           console.log(jsonResponse);
@@ -49,12 +50,11 @@
           liItem.innerHTML = jsonResponse['description'];
           document.getElementById('todos').appendChild(liItem);
           document.getElementById('error').className = 'hidden';
-        })
+        });
         .catch(function() {
           document.getElementById('error').className = '';
         })
       }
     </script>
-
   </body>
 </html>
