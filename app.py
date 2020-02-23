@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
+import sys
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://mac@localhost:5432/todoapp'
@@ -31,7 +32,7 @@ def create_todo():
   except:
     error = True
     db.session.rollback()
-    print(sys.exec_info())
+    print(sys.exc_info())
   finally:
     db.session.close() # return connections to the connection pool at the end of each session
   if error:
