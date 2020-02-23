@@ -20,10 +20,30 @@
     <div id="error" class="hidden">Whoops! Something went wrong</div>
     <ul id="todos">
       {% for d in data %}
-      <li><input type="checkbox" {% if d.completed %} checked {% endif %} /> {{ d.description }}</li>
+      <li><input class="check-completed" type="checkbox" {% if d.completed %} checked {% endif %} /> {{ d.description }}</li>
       {% endfor %}
     </ul>
     <script>
+      const checkboxes = document.querySelectorAll('.check-completed');
+      //document.querySelectorAll returns an array-like object and we will loop over all checkboxes
+      for (let i=0; i<checkboxes.length; i++) {
+        const checkbox = checkboxes[i];
+        // listen to change events being triggered:
+        checkbox.onchange = function(e) {
+          console.log('event',e);
+          // event_target/checked is the updated state we want to tell the server to update that todo item's completed state to
+          const newCompleted = e.target.checked;
+          fetch('/todos/set-completed', {
+            method: 'POST',
+            body: JSON.stringify({
+              'completed': newCompleted
+            }),
+            headers: {
+            'Content-Type': 'application/json'
+            }
+          })
+        }
+      }
       document.getElementById('form').onsubmit = function(e) {
         e.preventDefault();
         // use the event object (that is on an event handler) to prevent the default behavior that would be to submit using the method and action, as well as refresh the page
