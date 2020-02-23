@@ -63,4 +63,4 @@ def set_completed_todo(todo_id):
 
 @app.route('/')
 def index():  #index is the name for the route handler that listens to changes on the index route
-  return render_template('index.html', data=Todo.query.all())
+  return render_template('index.html', data=Todo.query.order_by('id').all())
