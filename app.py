@@ -11,7 +11,6 @@ class Todo(db.Model):
   __tablename__ = 'todos'
   id = db.Column(db.Integer, primary_key=True)
   description = db.Column(db.String(), nullable=False)
-
   def __repr__(self):
     return f'<Todo {self.id} {self.description}>'
 
@@ -40,7 +39,7 @@ def create_todo():
   else:
     return jsonify(body)  # return JSON data to the client
 
+
 @app.route('/')
 def index():  #index is the name for the route handler that listens to changes on the index route
-
   return render_template('index.html', data=Todo.query.all())
