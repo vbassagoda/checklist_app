@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, abort, jsonify
+from flask import Flask, render_template, request, abort, jsonify, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import sys
@@ -43,6 +43,23 @@ def create_todo():
   else:
     return jsonify(body)  # return JSON data to the client
 
+
+@app.route('/todos/<todo_id>/set-completed', methods=['POST'])
+#this route is also grabbing the id of the existing todo item that we are going to change the completed status to
+def set_completed_todo(todo_id):
+  try:
+    request.get_json()['completed']
+    todo = Todo.query.get(todo_id) #grab the target todo item
+    todo.completed = completed
+    db.session.commit()
+  except:
+    db.session.rollback()
+  finally:
+    db.session.close()
+    #this will grab a fresh list of all the todo items and refresh the entire page of todo items
+  return redirect(url_for('index'))
+    
+  
 
 @app.route('/')
 def index():  #index is the name for the route handler that listens to changes on the index route

@@ -43,6 +43,12 @@
             'Content-Type': 'application/json'
             }
           })
+          .then(function() {
+            document.getElementById('error').className = 'hidden'
+          })
+          .catch(function() {
+            document.getElementById('error').className = '';
+        })
         }
       }
       document.getElementById('form').onsubmit = function(e) {
