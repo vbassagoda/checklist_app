@@ -15,7 +15,7 @@ class Todo(db.Model):
   __tablename__ = 'todos'
   id = db.Column(db.Integer, primary_key=True)
   description = db.Column(db.String(), nullable=False)
-  completed = db.Column(db.Boolean, nullable=False)
+  completed = db.Column(db.Boolean, nullable=False, default=False)
   def __repr__(self):
     return f'<Todo {self.id} {self.description}>'
 
@@ -48,7 +48,7 @@ def create_todo():
 #this route is also grabbing the id of the existing todo item that we are going to change the completed status to
 def set_completed_todo(todo_id):
   try:
-    request.get_json()['completed']
+    completed = request.get_json()['completed']
     todo = Todo.query.get(todo_id) #grab the target todo item
     todo.completed = completed
     db.session.commit()
