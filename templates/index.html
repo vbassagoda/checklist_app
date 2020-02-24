@@ -35,7 +35,7 @@
       {% for d in data %}
       <li>
         <input class="check-completed" data-id="{{ d.id }}" type="checkbox" {% if d.completed %} checked {% endif %} /> {{ d.description }}
-        <button>&cross;</button>
+        <button class="delete-button" data-id="{{ d.id }}">&cross;</button>
       </li>
       {% endfor %}
     </ul>
@@ -47,11 +47,9 @@
         // listen to change events being triggered:
         checkbox.onchange = function(e) {
           console.log('event',e);
-          // event/target/checked is the updated state we want to tell the server to update that todo item's completed state to
-          const newCompleted = e.target.checked;
-          const todoId = e.target.dataset['id']
+          const todoId = e.target.dataset['id'];
           fetch('/todos/' + todoId + '/set-completed', {
-            method: 'POST',
+            method: 'GET',
             body: JSON.stringify({
               'completed': newCompleted
             }),
@@ -67,6 +65,8 @@
         })
         }
       }
+
+
       document.getElementById('form').onsubmit = function(e) {
         e.preventDefault();
         // use the event object (that is on an event handler) to prevent the default behavior that would be to submit using the method and action, as well as refresh the page
@@ -102,6 +102,18 @@
         .catch(function() {
           document.getElementById('error').className = '';
         })
+      }
+      const deleteBtns = document.querySelectorAll('.delete-button');
+      for (let i=0; i<deleteBtns.length; i++) {
+        const btn = deleteBtns[i];
+        checkbox.onclick = function(e) {
+          console.log('event',e);
+          const newCompleted = e.target.checked;
+          const todoId = e.target.dataset['id']
+          fetch('/todos/' + todoId + '/delete-button', {
+            method: 'DELETE'
+          });
+        }
       }
     </script>
   </body>
