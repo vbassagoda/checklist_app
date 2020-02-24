@@ -104,13 +104,13 @@
         })
       }
       const deleteBtns = document.querySelectorAll('.delete-button');
-      for (let i=0; i<deleteBtns.length; i++) {
+      for (let i=0; i < deleteBtns.length; i++) {
         const btn = deleteBtns[i];
-        checkbox.onclick = function(e) {
+        btn.onclick = function(e) {
           console.log('event',e);
           const newCompleted = e.target.checked;
           const todoId = e.target.dataset['id']
-          fetch('/todos/' + todoId + '/delete-button', {
+          fetch('/todos/' + todoId, {
             method: 'DELETE'
           });
         }
