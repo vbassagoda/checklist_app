@@ -59,7 +59,19 @@ def set_completed_todo(todo_id):
     #this will grab a fresh list of all the todo items and refresh the entire page of todo items
   return redirect(url_for('index'))
     
-  
+
+@app.route('/todos/<todo_id>', methods=['DELETE'])
+def delete_todo(todo_id):
+  try:
+    Todo.query.filter_by(id=todo_id).delete()
+    db.session.commit()
+  except:
+    db.session.rollback()
+  finally:
+    db.session.close()
+  return jsonify({ 'success': True })
+
+
 
 @app.route('/')
 def index():  #index is the name for the route handler that listens to changes on the index route
