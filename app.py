@@ -80,7 +80,10 @@ def delete_todo(todo_id):
   return jsonify({ 'success': True })
 
 
+@app.route('/lists/<list_id>') #return the elements of a particular list_id
+def get_list_todos(list_id): 
+  return render_template('index.html', data=Todo.query.filter_by(list_id=list_id).order_by('id').all())
 
-@app.route('/')
+@app.route('/') #we still need to keep the homepage route and redirect to list with list_id=1
 def index():  #index is the name for the route handler that listens to changes on the index route
-  return render_template('index.html', data=Todo.query.order_by('id').all())
+  return redirect(url_for('get_list_todos', list_id=1))
