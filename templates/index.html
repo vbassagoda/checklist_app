@@ -48,8 +48,9 @@
         checkbox.onchange = function(e) {
           console.log('event',e);
           const todoId = e.target.dataset['id'];
+          const newCompleted = e.target.checked
           fetch('/todos/' + todoId + '/set-completed', {
-            method: 'GET',
+            method: 'POST',
             body: JSON.stringify({
               'completed': newCompleted
             }),
